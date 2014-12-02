@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="uwosh.emergency.master">
+
+    <genericsetup:registerProfile
+      name="default"
+      title="Master Emergency Notification"
+      directory="profiles/default"
+      description='Product for controlling emergency notifications across multiple sites.'
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
+    <genericsetup:registerProfile
+      name="uninstall"
+      title="Master Emergency Notification Uninstall Profile"
+      directory="profiles/uninstall"
+      description="Removes uwosh.emergency.master"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
+</configure>

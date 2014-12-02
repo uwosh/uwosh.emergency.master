@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<import-steps>
+
+ <import-step 
+    id="uwosh.emergency.master-postInstall" 
+    handler="uwosh.emergency.master.importexport.install"
+    title="manual coded post-install for uwosh.emergency.master"
+    version="2008-11-12T15:25:18.681869">
+   manual coded post-install for uwosh.emergency.master
+   <dependency step="toolset" />
+   <dependency step="viewlets" />
+ </import-step>
+
+</import-steps>

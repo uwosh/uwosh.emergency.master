@@ -1,0 +1,127 @@
+Basic testing of this package.
+
+
+Let's do some setup and log in...
+
+    >>> from Products.Five.testbrowser import Browser
+	  >>> self.setRoles(("Manager",))
+	
+Install the product.
+
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> qi = getToolByName(self.portal, 'portal_quickinstaller')
+    >>> qi.installProduct('uwosh.emergency.master')
+    ''
+	
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+    >>> portal_url = self.portal.absolute_url()
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    
+    >>> browser.open(portal_url + '/login_form?came_from=' + portal_url)
+    >>> browser.getControl(name='__ac_name').value = portal_owner
+    >>> browser.getControl(name='__ac_password').value = default_password
+    >>> browser.getControl(name='submit').click()
+
+We then turn off the various portlets, because they sometimes duplicate links
+and text (e.g. the navtree, the recent recent items listing) that we wish to
+test for in our own views. Having no portlets makes things easier.
+
+    >>> from zope.component import getUtility, getMultiAdapter
+    >>> from plone.portlets.interfaces import IPortletManager
+    >>> from plone.portlets.interfaces import IPortletAssignmentMapping
+
+    >>> left_column = getUtility(IPortletManager, name=u"plone.leftcolumn")
+    >>> left_assignable = getMultiAdapter((self.portal, left_column), IPortletAssignmentMapping)
+    >>> for name in left_assignable.keys():
+    ...     del left_assignable[name]
+
+    >>> right_column = getUtility(IPortletManager, name=u"plone.rightcolumn")
+    >>> right_assignable = getMultiAdapter((self.portal, right_column), IPortletAssignmentMapping)
+    >>> for name in right_assignable.keys():
+    ...     del right_assignable[name]
+
+
+Now, check for the control panel entries
+
+    >>> browser.open(self.portal.absolute_url())
+    >>> browser.getLink('Site Setup').click()
+    >>> 'Emergency configuration' in browser.contents
+    True
+    >>> 'Emergency Notification Sites' in browser.contents
+    True
+    
+
+Open up the configuration page.
+
+    >>> browser.getLink('Emergency configuration').click()
+    
+    
+First off, the emergency message should not be shown right now  
+    >>> '<div id="emergencyMessage"' in browser.contents
+    False
+    
+Add an emergency message
+
+    >>> browser.getControl(name='form.display_emergency').value = True
+    >>> browser.getControl(name='form.emergency_message').value = "My Emergency Message"
+    >>> browser.getControl(name='form.actions.save').click()
+    
+
+Message should now be shown
+    >>> browser.open(self.portal.absolute_url())
+    >>> '<div id="emergencyMessage"' in browser.contents
+    True
+    >>> 'My Emergency Message' in browser.contents
+    True
+    
+    
+but not on all pages
+    >>> browser.open(self.portal.absolute_url() + '/news')
+    >>> '<div id="emergencyMessage"' in browser.contents
+    False
+    >>> 'My Emergency Message' in browser.contents
+    False
+    
+    
+Now remove it.
+    >>> browser.getLink('Site Setup').click()
+    >>> browser.getLink('Emergency configuration').click()
+    
+    >>> browser.getControl(name='form.display_emergency').value = False
+    >>> browser.getControl(name='form.actions.save').click()
+
+    
+Check again.
+    >>> browser.open(self.portal.absolute_url())
+    >>> '<div id="emergencyMessage"' in browser.contents
+    False
+    >>> 'My Emergency Message' in browser.contents
+    False
+
+    
+Add to all pages.
+    >>> browser.getLink('Site Setup').click()
+    >>> browser.getLink('Emergency configuration').click()
+
+    >>> browser.getControl(name='form.display_emergency').value = True
+    >>> browser.getControl(name='form.show_on_all_pages').value = True
+    >>> browser.getControl(name='form.actions.save').click()    
+    
+    
+Check again.
+    >>> browser.open(self.portal.absolute_url() + '/news')
+    >>> '<div id="emergencyMessage"' in browser.contents
+    True
+    >>> 'My Emergency Message' in browser.contents
+    True
+    
+    >>> browser.open(self.portal.absolute_url())
+    >>> '<div id="emergencyMessage"' in browser.contents
+    True
+    >>> 'My Emergency Message' in browser.contents
+    True
+
+
+Testing the remote sites is rather difficult....
+

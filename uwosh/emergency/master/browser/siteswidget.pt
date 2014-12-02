@@ -1,0 +1,70 @@
+<div lang="en"
+     xml:lang="en"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="plone">
+  <fieldset tal:define="all_sites python: view.sites()">
+    <legend i18n:translate="label_searchresults">Sites</legend>
+
+		<table class="listing" summary="Sites Listing">
+			<input type="hidden" name="numberofsites" tal:attributes="value python: len(all_sites) + 1" />
+			<thead>
+			<tr>
+				<th>Delete?</th>
+				<th>Enabled?</th>
+				<th>Site Url</th>
+			</tr>
+		  </thead>
+		  <tbody>
+		<tal:sites tal:repeat="site all_sites">
+			<tr>
+				<td>
+					<input type="checkbox" tal:attributes="name string:sitedelete-${repeat/site/index};">
+				</td>
+				<td> 
+					<div>
+					<input type="checkbox" 
+					  tal:attributes="name string:siteenabled-${repeat/site/index}; 
+					                  value python: site[1] and 'on' or 'off'; 
+					                  checked python: site[1] and 'checked' or ''" />	
+					</div>
+				</td>
+				<td>
+					<input type="text" tal:attributes="name string:siteurl-${repeat/site/index}; value python: site[0]" size="20" />
+				</td>
+			</tr>
+		</tal:sites>
+			<tr tal:condition="python: request.has_key('addRow')"
+			  tal:define="size python: str(len(all_sites));">
+			  <td></td>
+			  <td> 
+					<div>
+					  <input type="checkbox" tal:attributes="name string:siteenabled-${size};" value="on" checked="checked" />	
+					</div>
+				</td>
+				<td>
+					<input type="text" tal:attributes="name string:siteurl-${size};" size="20" />
+				</td>
+			</tr>
+			</tbody>
+		</table>
+<br />
+		<input type="submit"
+			name="updateSelection"
+			value="Remove Selected Sites"
+			/>
+		<input type="submit"
+			name="addRow"
+			value="Add Site"
+		/>
+
+  </fieldset>
+
+</div>
+<div class="key" tal:define="key view/public_key">
+  <h3>Public Key</h3>
+  <b>E</b><p class="discreet" tal:content="key/e"></p>
+  <b>N</b><p class="discreet" style="overflow:scroll; width:500px" tal:content="key/n"></p>
+</div>

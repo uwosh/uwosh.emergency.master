@@ -1,0 +1,4 @@
+<layers>
+    <layer name="uwosh.emergency.master" 
+           interface="uwosh.emergency.master.interfaces.IUWOshEmergencyMasterLayer" />
+</layers>

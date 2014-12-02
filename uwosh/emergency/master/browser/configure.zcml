@@ -1,0 +1,45 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <adapter factory=".controlpanel.MasterControlPanelAdapter" />
+  
+  <browser:page
+    name="emergency-master-controlpanel"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".controlpanel.MasterControlPanel"
+    layer="uwosh.emergency.master.interfaces.IUWOshEmergencyMasterLayer"
+    permission="uwosh.emergency.master.Manage"
+  />
+  
+	<browser:page
+		name="uwosh-master-simple-configuration"
+		for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+		class="uwosh.simpleemergency.browser.controlpanel.EmergencyNotificationConfigurationForm"
+		layer="uwosh.emergency.master.interfaces.IUWOshEmergencyMasterLayer"
+		permission="uwosh.ManageEmergencyMessage"
+	/>
+	
+	<browser:page
+		name="uwosh-emergency-master-public-key"
+		for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+		class=".push.PublicKey"
+		layer="uwosh.emergency.master.interfaces.IUWOshEmergencyMasterLayer"
+		permission="cmf.ManagePortal"
+	/>
+  
+  <!-- register the simple emergency viewlet in this package -->
+	<browser:viewlet
+		name="uwosh.simpleemergency.master"
+		manager="plone.app.layout.viewlets.interfaces.IPortalTop"
+		class="uwosh.simpleemergency.browser.viewlets.SimpleEmergencyViewlet"
+		layer="uwosh.emergency.master.interfaces.IUWOshEmergencyMasterLayer"
+		permission="zope2.View" 
+		/>
+  
+	<browser:resource
+    name="uwosh-emergency-master-config.png"
+		file="emblem-important.png"
+  />
+  
+</configure>

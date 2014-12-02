@@ -1,0 +1,17 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  i18n_domain="uwosh.emergency.master">
+
+  <include package="uwosh.simpleemergency" />
+  
+  <!-- Our custom permissions -->    
+  <permission
+    id="uwosh.emergency.master.Manage"
+    title="uwosh.emergency.master: Manage master emergency settings"
+  />
+
+	<include file="profiles.zcml" />
+	<include file="subscribers.zcml" />
+	<include package=".browser" />
+	
+</configure>

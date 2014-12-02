@@ -1,0 +1,12 @@
+1.0
+---
+* polish everything up
+* display public key in configuration of site so it isn't too cryptic to find
+* schedule messages to stop? May need to edit uwosh.simpleemergency for this...
+
+
+0.5
+---
+
+* basic functionality fulfilled
+* implement rsa public private key authentication

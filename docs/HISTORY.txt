@@ -1,0 +1,7 @@
+Changelog
+=========
+
+0.5
+---
+
+* initial and most basic configuration working

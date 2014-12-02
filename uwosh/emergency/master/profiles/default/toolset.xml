@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool-setup>
+  <required tool_id="portal_emergency_master"
+            class="uwosh.emergency.master.tool.MasterEmergencyTool" />
+</tool-setup>
+
